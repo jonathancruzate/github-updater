@@ -1,0 +1,7 @@
+- 2026-10-26 15:46 — jadx: v1.5.6 — installed jadx 1.5.6 at /home/hatch/workspace/github-updater/installs/jadx-1.5.6 (live path repointed, previous kept)
+- 2026-10-26 15:46 — gallery-dl: new tag v1.32.18 — watched (no asset download)
+- 2026-10-26 15:48 — yt-dlp: 2026.10.21 — installed yt-dlp 2026.10.21 (previous kept as yt-dlp.prev)
+- 2026-10-26 15:49 — rea: new tag rea-agents-6.8.0 — watched (no asset download)
+- 2026-10-26 15:52 — gallery-dl: v1.32.18 — installed gallery-dl [PYI-114664:ERROR] Could not load PyInstaller's embedded PKG archive from the executable (/home/hatch/.local/bin/gallery-dl.new) (previous kept as gallery-dl.prev)
+- 2026-10-26 15:55 — gallery-dl: v1.32.18 — install FAILED (pip: hint: See PEP 668 for the detailed specification.)
+- 2026-10-26 15:57 — gallery-dl: v1.32.18 — installed gallery-dl 1.32.18 via wheel (was 1.32.15; prior release stays in the mirror for rollback)

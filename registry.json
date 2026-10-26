@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "updated": "2026-10-26",
+  "projects": [
+    {
+      "id": "muse-widget",
+      "name": "Muse Widget",
+      "repo": "jonathancruzate/oneui9-meta-muse-widget",
+      "kind": "apk",
+      "package": "com.samsung.oneui9.metamusewidget",
+      "asset": ".apk",
+      "note": "One UI 9 widgets + ask page for Muse from Meta. Ours.",
+      "policy": "mirror"
+    },
+    {
+      "id": "github-updater",
+      "name": "GitHub Updater",
+      "repo": "jonathancruzate/github-updater",
+      "kind": "system",
+      "asset": "",
+      "note": "This updater system itself: registry + engine + state. Muse's, not an app.",
+      "policy": "watch"
+    },
+    {
+      "id": "jadx",
+      "name": "jadx",
+      "repo": "skylot/jadx",
+      "fork": "jonathancruzate/jadx",
+      "kind": "tool",
+      "asset": "jadx-{ver}.zip",
+      "note": "Android dex decompiler \u2014 the REA lane's engine.",
+      "policy": "install-jadx"
+    },
+    {
+      "id": "gallery-dl",
+      "name": "gallery-dl",
+      "repo": "mikf/gallery-dl",
+      "fork": "jonathancruzate/gallery-dl",
+      "kind": "tool",
+      "asset": "gallery_dl-{ver}-py3-none-any.whl",
+      "note": "Upstream moved active development to Codeberg (announced in the v1.32.18 release notes); the GitHub repo is a mirror now, so releases are tracked and downloaded from Codeberg, the project's official home.",
+      "policy": "install-wheel",
+      "bin_name": "gallery-dl",
+      "forge": "codeberg",
+      "pip_package": "gallery_dl"
+    },
+    {
+      "id": "yt-dlp",
+      "name": "yt-dlp",
+      "repo": "yt-dlp/yt-dlp",
+      "fork": "jonathancruzate/yt-dlp",
+      "kind": "tool",
+      "asset": "yt-dlp_linux",
+      "note": "Webinar/media downloads (pdu-dl.sh).",
+      "policy": "install-binary",
+      "bin_name": "yt-dlp"
+    },
+    {
+      "id": "rea",
+      "name": "REA",
+      "repo": "morluto/rea",
+      "fork": "jonathancruzate/rea",
+      "kind": "tool",
+      "asset": "",
+      "note": "Reverse Engineer Anything \u2014 agents + MCP for binary/APK analysis.",
+      "policy": "watch"
+    },
+    {
+      "id": "cronometer-cli",
+      "name": "Cronometer CLI",
+      "repo": "jonathancruzate/cronometer-cli",
+      "kind": "source",
+      "asset": "",
+      "note": "Ours. Terminal client for Cronometer.",
+      "policy": "watch"
+    },
+    {
+      "id": "google-health-connector",
+      "name": "Google Health Connector",
+      "repo": "jonathancruzate/google-health-connector",
+      "kind": "source",
+      "asset": "",
+      "note": "Ours. Google Health API write path.",
+      "policy": "watch"
+    },
+    {
+      "id": "muse-file-search",
+      "name": "Muse File Search",
+      "repo": "jonathancruzate/muse-file-search",
+      "kind": "source",
+      "asset": "",
+      "note": "Ours. Zero-token universal cached search.",
+      "policy": "watch"
+    },
+    {
+      "id": "muse-connectors",
+      "name": "Muse Connectors",
+      "repo": "jonathancruzate/muse-connectors",
+      "kind": "source",
+      "asset": "",
+      "note": "Ours. Custom connector shelf.",
+      "policy": "watch"
+    },
+    {
+      "id": "muse-smart-home",
+      "name": "Muse Smart Home",
+      "repo": "jonathancruzate/muse-smart-home",
+      "kind": "source",
+      "asset": "",
+      "note": "Ours. Smart-home automation patterns.",
+      "policy": "watch"
+    }
+  ]
+}

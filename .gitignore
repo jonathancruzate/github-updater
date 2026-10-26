@@ -1,0 +1,6 @@
+state.json
+mirror/
+installs/
+app/
+__pycache__/
+*.part
