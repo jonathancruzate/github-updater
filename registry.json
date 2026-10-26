@@ -13,17 +13,6 @@
       "policy": "mirror"
     },
     {
-      "id": "pixelboard",
-      "name": "PixelBoard",
-      "repo": "Akshayykadam/PixelBoard",
-      "kind": "apk",
-      "package": "com.akshaykadam.pixelboard",
-      "asset": "PixelBoard-",
-      "policy": "held-install",
-      "note": "Consolidated from the github-release-radar hook 2026-10-26 (his order: consolidate all repo watchers into the updater). Install HELD since 2026-10-15 pending Jonathan's Install/Skip decision; adb link also down since 2026-10-14 (re-pair is his phone step). The updater watches formal releases, downloads and package-verifies the full APK, and refreshes the pending-install record \u2014 it never installs.",
-      "asset_fallback": "PixelBoard-{tag}.apk"
-    },
-    {
       "id": "github-updater",
       "name": "GitHub Updater",
       "repo": "jonathancruzate/github-updater",

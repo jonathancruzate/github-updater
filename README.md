@@ -48,12 +48,14 @@ no manual version chasing.
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.
 - **PixelBoard** was consolidated into this registry on 2026-10-26
-  (the `github-release-radar` hook that used to watch it is retired —
-  one watcher per stream). It carries a **held-install** policy:
-  new formal releases are downloaded and package-verified and the
-  pending-install record is refreshed, but never installed —
-  installation has been held for Jonathan's Install/Skip decision
-  since 2026-10-15, and the adb link has been down since 2026-10-14.
+  (retiring the `github-release-radar` hook), then retired from it
+  the same evening: Jonathan adopted **Obtainium** on the phone,
+  which now owns PixelBoard (and Muse Widget) updates directly
+  from GitHub releases — one watcher per stream, and the phone-side
+  watcher is the one that can actually install. The held-install
+  policy below served it during the consolidation; its install had
+  been held for his decision since 2026-10-15, and the adb install
+  path had been down since 2026-10-14.
 
 ## Files
 

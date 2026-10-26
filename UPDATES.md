@@ -7,3 +7,4 @@
 - 2026-10-26 15:57 — gallery-dl: v1.32.18 — installed gallery-dl 1.32.18 via wheel (was 1.32.15; prior release stays in the mirror for rollback)
 - 2026-10-26 17:14 — muse-widget: v4.3.1 — mirrored
 - 2026-10-26 17:20 — pixelboard: 1.3.2 — downloaded + package-verified; install HELD for Jonathan's decision (pending record refreshed)
+- 2026-10-26 18:01 — pixelboard: retired from the registry; Obtainium owns phone installs (Jonathan's confirmation)
