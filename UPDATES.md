@@ -5,3 +5,5 @@
 - 2026-10-26 15:52 — gallery-dl: v1.32.18 — installed gallery-dl [PYI-114664:ERROR] Could not load PyInstaller's embedded PKG archive from the executable (/home/hatch/.local/bin/gallery-dl.new) (previous kept as gallery-dl.prev)
 - 2026-10-26 15:55 — gallery-dl: v1.32.18 — install FAILED (pip: hint: See PEP 668 for the detailed specification.)
 - 2026-10-26 15:57 — gallery-dl: v1.32.18 — installed gallery-dl 1.32.18 via wheel (was 1.32.15; prior release stays in the mirror for rollback)
+- 2026-10-26 17:14 — muse-widget: v4.3.1 — mirrored
+- 2026-10-26 17:20 — pixelboard: 1.3.2 — downloaded + package-verified; install HELD for Jonathan's decision (pending record refreshed)

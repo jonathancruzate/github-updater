@@ -22,6 +22,10 @@ and applies the project's install policy:
                   previous tree kept as jadx.prev).
   mirror          asset mirrored, nothing installed (e.g. our own
                   published APKs).
+  held-install    asset mirrored and package-verified, and the
+                  pending-install record refreshed — but never
+                  installed: the install is gated on Jonathan's
+                  decision (PixelBoard, held since 2026-10-15).
   watch           tag recorded only (source projects, REA).
 
 State lives in state.json; every action appends a line to
@@ -158,7 +162,7 @@ def run_version(cmd, env_extra=None):
         return ""
 
 
-def pick_asset(rel, match, tag=""):
+def pick_asset(rel, match, tag="", fallback=""):
     assets = rel.get("assets", [])
     if match:
         if "{" in match:
@@ -172,6 +176,9 @@ def pick_asset(rel, match, tag=""):
         for a in assets:
             if match in a.get("name", ""):
                 return a
+        if fallback and "{" in fallback:
+            return {"name": render_asset_name(fallback, tag),
+                    "browser_download_url": None}
         return None
     return assets[0] if assets else None
 
@@ -191,6 +198,46 @@ def install_binary(project, file_path):
         shutil.copy2(dest, prev)
     os.replace(staged, dest)
     return "installed %s %s (previous kept as %s.prev)" % (name, ver, name)
+
+
+def verify_package(apk_path, package):
+    """Radar-style package check: the binary manifest carries the
+    package name as UTF-16LE strings."""
+    try:
+        with zipfile.ZipFile(apk_path) as z:
+            data = z.read("AndroidManifest.xml")
+        return (package.encode("utf-16-le") in data
+                or package in data.decode("utf-16-le", "ignore"))
+    except Exception:
+        return False
+
+
+def install_held(project, file_path, tag, sha):
+    """For installs gated on Jonathan's decision (PixelBoard, held
+    since 2026-10-15): verify the package, mirror the APK, and
+    refresh the pending-install record. Never installs."""
+    if project.get("package") and not verify_package(file_path, project["package"]):
+        return "HELD-INSTALL FAILED (package mismatch — not recorded as pending)"
+    record = {"project": project["id"], "tag": tag, "apk": file_path,
+              "apk_path": file_path,
+              "sha256": sha, "package": project.get("package"),
+              "status": "held",
+              "note": ("Install held pending Jonathan's Install/Skip decision "
+                       "(standing since 2026-10-15); adb link also down "
+                       "since 2026-10-14."),
+              "recorded": now()}
+    pdir = os.path.join(HERE, "pending")
+    os.makedirs(pdir, exist_ok=True)
+    with open(os.path.join(pdir, project["id"] + ".json"), "w") as f:
+        json.dump(record, f, indent=2)
+    legacy = os.path.expanduser("~/hooks/state/pixelboard-pending-install.json")
+    try:
+        with open(legacy, "w") as f:
+            json.dump(record, f, indent=2)
+    except Exception:
+        pass
+    return ("downloaded + package-verified; install HELD for Jonathan's "
+            "decision (pending record refreshed)")
 
 
 def install_wheel(project, file_path):
@@ -286,7 +333,8 @@ def main():
                                          and not failed_before):
                     continue  # already current and fully applied
             entry = {"tag": tag, "checked": now()}
-            asset = pick_asset(rel, project.get("asset", ""), tag)
+            asset = pick_asset(rel, project.get("asset", ""), tag,
+                               project.get("asset_fallback", ""))
             if policy == "watch" or asset is None:
                 entry["action"] = "watched (no asset download)"
                 state[pid] = entry
@@ -326,6 +374,8 @@ def main():
                 entry["action"] = install_binary(project, dest)
             elif policy == "install-wheel":
                 entry["action"] = install_wheel(project, dest)
+            elif policy == "held-install":
+                entry["action"] = install_held(project, dest, tag, sha)
             elif policy == "install-jadx":
                 entry["action"] = install_jadx(project, dest, tag)
             state[pid] = entry

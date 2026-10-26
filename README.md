@@ -25,6 +25,9 @@ no manual version chasing.
   - **install-jadx** — versioned unpack; the live tools path is
     repointed only after the new jadx runs. *(jadx, the REA lane's
     decompiler)*
+  - **held-install** — asset mirrored and package-verified, the
+    pending-install record refreshed, but never installed: the
+    install is gated on Jonathan's decision. *(PixelBoard)*
   - **mirror** — asset archived locally, nothing installed.
     *(our own published builds, e.g. Muse Widget)*
   - **watch** — new tags recorded only. *(REA, our source projects)*
@@ -44,9 +47,13 @@ no manual version chasing.
 - **gallery-dl** upstream moved active development to Codeberg
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.
-- PixelBoard is deliberately **not** in this registry: a separate
-  release-radar lane already watches it and installs its APKs.
-  One watcher per stream.
+- **PixelBoard** was consolidated into this registry on 2026-10-26
+  (the `github-release-radar` hook that used to watch it is retired —
+  one watcher per stream). It carries a **held-install** policy:
+  new formal releases are downloaded and package-verified and the
+  pending-install record is refreshed, but never installed —
+  installation has been held for Jonathan's Install/Skip decision
+  since 2026-10-15, and the adb link has been down since 2026-10-14.
 
 ## Files
 
