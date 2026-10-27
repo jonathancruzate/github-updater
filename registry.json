@@ -5,7 +5,7 @@
     {
       "id": "muse-widget",
       "name": "Muse Widget",
-      "repo": "jonathancruzate/oneui9-meta-muse-widget",
+      "repo": "jonathancruzate/meta-muse-widget",
       "kind": "apk",
       "package": "com.samsung.oneui9.metamusewidget",
       "asset": "Muse-Widget-{ver}.apk",
