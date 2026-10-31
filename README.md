@@ -65,3 +65,10 @@ no manual version chasing.
 | `updater.py` | The engine — check, mirror, verify, install |
 | `UPDATES.md` | Append-only log of everything it has done |
 | `state.json` | Local run state (not published) |
+
+## Install it with Muse
+
+Just give this prompt to your Muse:
+
+> "Install GitHub Updater from https://github.com/jonathancruzate/github-updater — read the README, install it, set it up for me, and show me how to use it."
+
