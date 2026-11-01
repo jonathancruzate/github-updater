@@ -6,8 +6,10 @@ projects — mostly GitHub projects, plus one web-distributed skill
 account, downloaded from the projects' official releases, and
 auto-updated** — no manual version chasing.
 
-> This is agent infrastructure that runs on Muse's VM. It is not a
-> phone app and has no Android component.
+> This is agent infrastructure that runs on Muse's VM. It also has
+> an Android companion app (`app/`, package
+> `com.jonathancruzate.metamusegithubupdater`) that surfaces the
+> catalog on Jonathan's phone.
 
 ## How it works
 
