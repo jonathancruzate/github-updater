@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "updated": "2026-10-31",
+  "updated": "2026-11-01",
   "projects": [
     {
       "id": "muse-widget",
       "name": "Muse Widget",
       "repo": "jonathancruzate/meta-muse-widget",
       "kind": "apk",
-      "package": "com.samsung.oneui9.metamusewidget",
-      "asset": "Muse-Widget-{ver}.apk",
+      "package": "com.jonathancruzate.metamusewidget",
+      "asset": "Meta-Muse-Widget-{ver}.apk",
       "note": "One UI 9 widgets + ask page for Muse from Meta. Ours.",
       "policy": "mirror"
     },
