@@ -1,9 +1,10 @@
 # GitHub Updater — Muse's auto-updater
 
 An app store whose customer is Muse. Our tooling runs on a set of
-GitHub projects; this system keeps them **forked into this account,
-downloaded from the projects' official releases, and auto-updated** —
-no manual version chasing.
+projects — mostly GitHub projects, plus one web-distributed skill
+(McClipFace) — and this system keeps them **forked into this
+account, downloaded from the projects' official releases, and
+auto-updated** — no manual version chasing.
 
 > This is agent infrastructure that runs on Muse's VM. It is not a
 > phone app and has no Android component.
@@ -31,8 +32,14 @@ no manual version chasing.
   - **mirror** — asset archived locally, nothing installed.
     *(our own published builds, e.g. Muse Widget)*
   - **watch** — new tags recorded only. *(REA, our source projects)*
+  - **watch-web-skill** — no forge release to track: the project's
+    remote `SKILL.md` version is compared to the locally installed
+    skill; an available update is recorded and surfaced, never
+    auto-installed — that skill's terms require Jonathan's yes
+    before every update. *(McClipFace)*
 - A daily scheduled run executes it (~05:22 ET). Routine updates are
-  silent; only install failures surface. Run history accumulates in
+  silent; install failures surface, and so does a McClipFace update
+  waiting on Jonathan's decision. Run history accumulates in
   `UPDATES.md`; current state in `state.json` (local only).
 - The unauthenticated GitHub API rate limit on a shared egress is
   easily exhausted, so GitHub tag checks fall back to the API-free
@@ -44,6 +51,14 @@ no manual version chasing.
   (jadx, gallery-dl, yt-dlp, rea). Forks snapshot upstream at fork
   time; the updater tracks **upstream** releases, which is where
   updates actually come from.
+- **McClipFace** is part of the Muse tooling catalog like the
+  projects above — the coupon/deal skill Muse uses when
+  shopping — but it is not a forge project: it is web-distributed,
+  so its version source is the metadata of
+  https://mcclipface.com/SKILL.md, checked against the locally
+  installed skill under the **watch-web-skill** policy. It is
+  watch-and-surface only — its terms require Jonathan's yes
+  before every update, so it is never auto-installed.
 - **gallery-dl** upstream moved active development to Codeberg
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.

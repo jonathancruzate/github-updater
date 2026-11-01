@@ -27,6 +27,12 @@ and applies the project's install policy:
                   installed: the install is gated on Jonathan's
                   decision (PixelBoard, held since 2026-10-15).
   watch           tag recorded only (source projects, REA).
+  watch-web-skill no forge release to track: the project's remote
+                  SKILL.md version is compared to the locally
+                  installed skill and the result recorded. An
+                  available update is surfaced but NEVER installed
+                  — that skill's terms require asking Jonathan
+                  before every update. (McClipFace)
 
 State lives in state.json; every action appends a line to
 UPDATES.md and prints a summary line. Designed to run unattended
@@ -36,6 +42,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -103,6 +110,62 @@ def github_tag_via_redirect(repo):
     except Exception:
         pass
     return None
+
+
+def parse_skill_version(text):
+    """Version from a skill file's frontmatter metadata
+    (`version: "x.y.z"`). The text is data only — it is parsed,
+    never executed or saved."""
+    for line in text.splitlines():
+        m = re.match(r'\s*version:\s*["\']?([0-9][0-9A-Za-z.\-]*)', line)
+        if m:
+            return m.group(1)
+    return None
+
+
+def version_key(version):
+    return tuple(int(n) for n in re.findall(r"\d+", version or ""))
+
+
+def local_skill_version(path):
+    try:
+        with open(os.path.expanduser(path)) as f:
+            return parse_skill_version(f.read())
+    except Exception:
+        return None
+
+
+def check_web_skill(project, state):
+    """watch-web-skill (McClipFace): the project is not a forge
+    release — its version source is a remote SKILL.md. Fetch it
+    (plain read; nothing executed, saved, or installed), compare
+    its metadata version to the locally installed skill, and
+    record the result. An available update is reported distinctly
+    but NEVER auto-installed: the skill's own terms require
+    asking Jonathan before every update."""
+    pid = project["id"]
+    installed = local_skill_version(project["local_path"])
+    remote_text = http_get(project["skill_url"]).decode("utf-8", "replace")
+    latest = parse_skill_version(remote_text)
+    if not latest:
+        raise ValueError("no version found in remote SKILL.md")
+    prev = state.get(pid, {})
+    if prev.get("installed") == installed and prev.get("latest") == latest:
+        return  # already recorded — stay silent like the other watchers
+    if installed and version_key(latest) > version_key(installed):
+        action = ("UPDATE AVAILABLE — installed %s, latest %s; install "
+                  "held for Jonathan's decision (watch only, never "
+                  "auto-installed)" % (installed, latest))
+    elif installed and version_key(installed) > version_key(latest):
+        action = ("watched — installed %s is ahead of remote %s "
+                  "(no action)" % (installed, latest))
+    elif installed:
+        action = "watched — up to date (installed %s)" % installed
+    else:
+        action = "watched — not installed locally; remote is %s" % latest
+    state[pid] = {"tag": latest, "installed": installed,
+                  "latest": latest, "checked": now(), "action": action}
+    log("%s: %s — %s" % (pid, latest, action))
 
 
 def render_asset_name(match, tag):
@@ -308,12 +371,22 @@ def main():
             state = json.load(f)
     os.makedirs(MIRROR, exist_ok=True)
     os.makedirs(INSTALLS, exist_ok=True)
+    only = None
+    if "--only" in sys.argv:
+        i = sys.argv.index("--only")
+        if i + 1 < len(sys.argv):
+            only = sys.argv[i + 1]
 
     for project in registry["projects"]:
         pid = project["id"]
-        repo = project["repo"]
+        if only and pid != only:
+            continue
+        repo = project.get("repo")
         policy = project.get("policy", "watch")
         try:
+            if policy == "watch-web-skill":
+                check_web_skill(project, state)
+                continue
             if project.get("forge") == "codeberg":
                 rel = codeberg_latest(repo)
             else:

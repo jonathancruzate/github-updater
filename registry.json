@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-26",
+  "updated": "2026-10-31",
   "projects": [
     {
       "id": "muse-widget",
@@ -109,6 +109,15 @@
       "asset": "",
       "note": "Ours. Smart-home automation patterns.",
       "policy": "watch"
+    },
+    {
+      "id": "mcclipface",
+      "name": "McClipFace",
+      "kind": "web-skill",
+      "skill_url": "https://mcclipface.com/SKILL.md",
+      "local_path": "~/workspace/custom-skills/clippy-mc-clipface/SKILL.md",
+      "note": "Coupon/deal lookup skill Muse uses when shopping. Not a forge project: its version source is the remote SKILL.md metadata, compared against the locally installed skill (the install ID in the local skill file is preserved on updates). Watch only — its terms require Jonathan's yes before every update, so it is never auto-installed.",
+      "policy": "watch-web-skill"
     }
   ]
 }
