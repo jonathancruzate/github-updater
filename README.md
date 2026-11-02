@@ -77,6 +77,9 @@ auto-updated** — no manual version chasing.
   is mirror-only for the Linux x86_64 tarball and is cleared for
   use as needed on the Hetzner VPS — the updater keeps a verified
   copy ready to deploy; nothing GUI is ever auto-installed.
+  Which of these tools (or REA) fits a given job is decided by
+  Muse's `local-craft-software-selection` skill, which maps
+  every Craft app to its medium and lane.
 - **gallery-dl** upstream moved active development to Codeberg
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.
