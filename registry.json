@@ -78,6 +78,7 @@
       "id": "craft-launcher",
       "name": "ArtCraft Launcher",
       "repo": "storytold/craft-launcher",
+      "fork": "jonathancruzate/craft-launcher",
       "kind": "tool",
       "asset": "artcraft-launcher-{ver}-linux-x86_64.tar.gz",
       "note": "Launcher for the whole Craft App Suite (PhotoCraft, FilmCraft, DesignCraft, Craft Anything, and the rest) \u2014 installs, updates, and opens every Craft app from one place. Jonathan (2026-11-01): added to the updater and cleared for use as needed on the Hetzner VPS. Mirror only, never auto-installed: it is a GUI desktop app, so the updater mirrors and verifies the Linux x86_64 tarball and the VPS install is done from that vetted copy when a Craft app is actually needed. Early alpha.",
