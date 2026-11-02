@@ -8,3 +8,12 @@
 - 2026-10-26 17:14 — muse-widget: v4.3.1 — mirrored
 - 2026-10-26 17:20 — pixelboard: 1.3.2 — downloaded + package-verified; install HELD for Jonathan's decision (pending record refreshed)
 - 2026-10-26 18:01 — pixelboard: retired from the registry; Obtainium owns phone installs (Jonathan's confirmation)
+- 2026-10-27 05:23 — yt-dlp: 2026.10.26 — installed yt-dlp 2026.10.26 (previous kept as yt-dlp.prev)
+- 2026-10-27 10:09 — muse-widget: v4.4.0 — mirrored
+- 2026-10-28 05:22 — muse-widget: v4.6.2 — mirrored
+- 2026-10-29 05:22 — muse-widget: v4.8.0 — mirrored
+- 2026-11-01 03:56 — mcclipface: 3.0.4 — watched — up to date (installed 3.0.4)
+- 2026-11-01 05:22 — muse-widget: v4.10.0 — mirrored
+- 2026-11-01 05:23 — gallery-dl: v1.32.19 — installed gallery-dl 1.32.19 via wheel (was 1.32.18; prior release stays in the mirror for rollback)
+- 2026-11-02 03:26 — craft-anything: new tag v0.2.0 — watched (no asset download)
+- 2026-11-01 22:29 — craft-launcher: v0.13.0 — mirrored

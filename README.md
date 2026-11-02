@@ -32,8 +32,10 @@ auto-updated** — no manual version chasing.
     pending-install record refreshed, but never installed: the
     install is gated on Jonathan's decision. *(PixelBoard)*
   - **mirror** — asset archived locally, nothing installed.
-    *(our own published builds, e.g. Muse Widget)*
-  - **watch** — new tags recorded only. *(REA, our source projects)*
+    *(our own published builds, e.g. Muse Widget; also the
+    ArtCraft Launcher's Linux tarball, mirrored vetted-ready to
+    deploy to the Hetzner VPS when a Craft app is needed)*
+  - **watch** — new tags recorded only. *(REA, Craft Anything, our source projects)*
   - **watch-web-skill** — no forge release to track: the project's
     remote `SKILL.md` version is compared to the locally installed
     skill; an available update is recorded and surfaced, never
@@ -61,6 +63,20 @@ auto-updated** — no manual version chasing.
   installed skill under the **watch-web-skill** policy. It is
   watch-and-surface only — its terms require Jonathan's yes
   before every update, so it is never auto-installed.
+- **Craft Anything** was added 2026-11-01 as REA's craft/build
+  companion under **watch**: the updater records upstream releases
+  only. It is early alpha, and neither its source build nor its
+  `craft-anything-cli setup` (which writes coding-agent configs) is
+  ever run by the updater; installation waits on a scoped first-use
+  review (pairing rule in the REA skill).
+- **Craft Anything / ArtCraft Launcher** (added 2026-11-01, at
+  Jonathan's order): the Craft suite sits alongside REA.
+  Craft Anything is watch-only (early alpha, install gated on a
+  scoped first-use review — see the REA skill's pairing note).
+  Its launcher, ArtCraft Launcher (`storytold/craft-launcher`),
+  is mirror-only for the Linux x86_64 tarball and is cleared for
+  use as needed on the Hetzner VPS — the updater keeps a verified
+  copy ready to deploy; nothing GUI is ever auto-installed.
 - **gallery-dl** upstream moved active development to Codeberg
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.
