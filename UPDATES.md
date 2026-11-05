@@ -17,3 +17,10 @@
 - 2026-11-01 05:23 — gallery-dl: v1.32.19 — installed gallery-dl 1.32.19 via wheel (was 1.32.18; prior release stays in the mirror for rollback)
 - 2026-11-02 03:26 — craft-anything: new tag v0.2.0 — watched (no asset download)
 - 2026-11-01 22:29 — craft-launcher: v0.13.0 — mirrored
+- 2026-11-02 05:22 — muse-widget: v4.12.2 — mirrored
+- 2026-11-02 05:22 — github-updater: new tag v1.1.0 — watched (no asset download)
+- 2026-11-02 05:23 — mcclipface: 3.1.1 — UPDATE AVAILABLE — installed 3.0.4, latest 3.1.1; install held for Jonathan's decision (watch only, never auto-installed)
+- 2026-11-02 09:11 — mcclipface: 3.1.1 — installed at Jonathan's yes (was 3.0.4; SKILL.md replaced, 5 reference files added under references/, install ID kept; test lookup returned available)
+- 2026-11-03 05:22 — craft-anything: new tag v0.3.0 — watched (no asset download)
+- 2026-11-03 05:23 — craft-launcher: v0.14.0 — mirrored
+- 2026-11-03 05:25 — mcclipface: 3.1.1 — watched — up to date (installed 3.1.1)
