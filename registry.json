@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-01",
+  "updated": "2026-11-08",
   "projects": [
     {
       "id": "muse-widget",
@@ -127,6 +127,15 @@
       "kind": "source",
       "asset": "",
       "note": "Ours. Smart-home automation patterns.",
+      "policy": "watch"
+    },
+    {
+      "id": "museai-bypass",
+      "name": "Muse AI Bypass",
+      "repo": "Git-FED/MuseAi-Bypass",
+      "kind": "source",
+      "asset": "",
+      "note": "Third-party catalog of official APIs / public feeds / safer alternatives when a normal route is unavailable (not a bypass tool — its README disclaims defeating auth, paywalls, CAPTCHA, DRM, MFA, geo or rate limits). Mined 2026-11-08 at Jonathan's order: the routes we lacked were built into the public-data connector pack and the Stephany job crawler (see ~/workspace/museai-bypass-mining-2026-11-08.md). Watch only: at add time it had no releases or tags (4 commits, head 868f301), so the watcher records 'no releases' until upstream ships one.",
       "policy": "watch"
     },
     {

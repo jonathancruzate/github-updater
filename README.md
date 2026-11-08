@@ -80,6 +80,14 @@ auto-updated** — no manual version chasing.
   Which of these tools (or REA) fits a given job is decided by
   Muse's `local-craft-software-selection` skill, which maps
   every Craft app to its medium and lane.
+- **Muse AI Bypass** (`Git-FED/MuseAi-Bypass`) was added
+  2026-11-08 at Jonathan's order under **watch**: a third-party
+  catalog of official APIs / public feeds mined that day for
+  routes Muse lacked (its finds were built into the public-data
+  connector pack and the Stephany job crawler). It ships no
+  releases or tags, so the watcher records "no releases" until
+  upstream publishes one — the watch exists so a first release
+  or a substantive upstream change is noticed, not missed.
 - **gallery-dl** upstream moved active development to Codeberg
   (announced in its v1.32.18 release notes); its GitHub repo is a
   mirror, so it is tracked and downloaded from Codeberg.
