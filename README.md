@@ -28,23 +28,33 @@ auto-updated** — no manual version chasing.
   - **install-jadx** — versioned unpack; the live tools path is
     repointed only after the new jadx runs. *(jadx, the REA lane's
     decompiler)*
+  - **install-npm** — on a new upstream tag, the tool's npm package
+    is updated to `@latest` and the CLI probed; a failed probe
+    rolls back to the previous version. *(REA)*
+  - **install-tarball** — the release tarball is extracted under
+    `installs/` (extraction is the install for a portable app);
+    the VPS deploy uses that vetted copy. *(ArtCraft Launcher)*
   - **held-install** — asset mirrored and package-verified, the
     pending-install record refreshed, but never installed: the
-    install is gated on Jonathan's decision. *(PixelBoard)*
+    install is gated on Jonathan's decision. *(PixelBoard —
+    retired; no registry project has used it since 2026-11-17)*
   - **mirror** — asset archived locally, nothing installed.
-    *(our own published builds, e.g. Muse Widget; also the
-    ArtCraft Launcher's Linux tarball, mirrored vetted-ready to
-    deploy to the Hetzner VPS when a Craft app is needed)*
-  - **watch** — new tags recorded only. *(REA, Craft Anything, our source projects)*
-  - **watch-web-skill** — no forge release to track: the project's
-    remote `SKILL.md` version is compared to the locally installed
-    skill; an available update is recorded and surfaced, never
-    auto-installed — that skill's terms require Jonathan's yes
-    before every update. *(McClipFace)*
-- A daily scheduled run executes it (~05:22 ET). Routine updates are
-  silent; install failures surface, and so does a McClipFace update
-  waiting on Jonathan's decision. Run history accumulates in
-  `UPDATES.md`; current state in `state.json` (local only).
+    *(our own published builds, e.g. Muse Widget)*
+  - **watch** — new tags recorded only. *(our source projects,
+    which ship no installable release artifact)*
+  - **install-web-skill** — no forge release to track: the
+    project's remote `SKILL.md` version is compared to the locally
+    installed skill and a newer version is auto-installed
+    (`SKILL.md` plus its `references/`, local install ID
+    preserved, previous copy kept as `.prev`). *(McClipFace —
+    auto-install is Jonathan's standing order of 2026-11-17,
+    superseding the 2026-10-31 ask-first rule)*
+- A daily scheduled run executes it (~05:22 ET). Everything
+  auto-installs; routine updates are silent and install failures
+  surface. Run history accumulates in `UPDATES.md`; current state
+  in `state.json` (local only). Changes to the updater itself
+  (registry, engine, this README) are pushed upstream to this
+  repo as part of the same run.
 - The unauthenticated GitHub API rate limit on a shared egress is
   easily exhausted, so GitHub tag checks fall back to the API-free
   `/releases/latest` redirect plus direct release downloads.
@@ -60,23 +70,24 @@ auto-updated** — no manual version chasing.
   shopping — but it is not a forge project: it is web-distributed,
   so its version source is the metadata of
   https://mcclipface.com/SKILL.md, checked against the locally
-  installed skill under the **watch-web-skill** policy. It is
-  watch-and-surface only — its terms require Jonathan's yes
-  before every update, so it is never auto-installed.
+  installed skill under the **install-web-skill** policy. Since
+  Jonathan's standing order of 2026-11-17 ("always auto install,
+  update and upstream") it is auto-installed like everything
+  else in the catalog; the 2026-10-31 ask-first rule is retired.
 - **Craft Anything** was added 2026-11-01 as REA's craft/build
-  companion under **watch**: the updater records upstream releases
-  only. It is early alpha, and neither its source build nor its
-  `craft-anything-cli setup` (which writes coding-agent configs) is
-  ever run by the updater; installation waits on a scoped first-use
-  review (pairing rule in the REA skill).
+  companion. It is early alpha, and neither its source build nor
+  its `craft-anything-cli setup` (which writes coding-agent
+  configs) is ever run by the updater. Since the 2026-11-17
+  always-auto-install order it sits under **mirror**: release
+  assets download automatically when upstream ships them (no
+  asset pattern is set yet, so nothing downloads until one is).
 - **Craft Anything / ArtCraft Launcher** (added 2026-11-01, at
   Jonathan's order): the Craft suite sits alongside REA.
-  Craft Anything is watch-only (early alpha, install gated on a
-  scoped first-use review — see the REA skill's pairing note).
+  Craft Anything is mirror (early alpha — see the note above).
   Its launcher, ArtCraft Launcher (`storytold/craft-launcher`),
-  is mirror-only for the Linux x86_64 tarball and is cleared for
-  use as needed on the Hetzner VPS — the updater keeps a verified
-  copy ready to deploy; nothing GUI is ever auto-installed.
+  is cleared for use as needed on the Hetzner VPS and sits under
+  **install-tarball** since 2026-11-17: new Linux x86_64 tarballs
+  are extracted under `installs/` automatically, ready to deploy.
   Which of these tools (or REA) fits a given job is decided by
   Muse's `local-craft-software-selection` skill, which maps
   every Craft app to its medium and lane.

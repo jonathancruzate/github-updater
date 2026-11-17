@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08",
+  "updated": "2026-11-17",
   "projects": [
     {
       "id": "muse-widget",
@@ -62,8 +62,10 @@
       "fork": "jonathancruzate/rea",
       "kind": "tool",
       "asset": "",
-      "note": "Reverse Engineer Anything \u2014 agents + MCP for binary/APK analysis.",
-      "policy": "watch"
+      "note": "Reverse Engineer Anything \u2014 agents + MCP for binary/APK analysis. npm-managed (rea-agents), so a new upstream tag triggers an npm @latest install with a version probe and rollback on failure (auto-install order, 2026-11-17).",
+      "policy": "install-npm",
+      "npm_package": "rea-agents",
+      "bin_name": "rea"
     },
     {
       "id": "craft-anything",
@@ -71,8 +73,8 @@
       "repo": "storytold/craft-anything",
       "kind": "tool",
       "asset": "",
-      "note": "Craft/build companion to REA \u2014 studies a website, app, game, or file, then recreates it and diffs the result against the original. Early alpha; watch only, never auto-install: the source build and its coding-agent setup are gated on a scoped first-use review (see the REA skill's pairing note).",
-      "policy": "watch"
+      "note": "Craft/build companion to REA \u2014 studies a website, app, game, or file, then recreates it and diffs the result against the original. Early alpha. Per Jonathan's 2026-11-17 always-auto-install order it mirrors release assets automatically when upstream ships them (no asset pattern is set yet, so nothing downloads until one is); its source build and coding-agent setup are still only ever run by Muse deliberately, never by the updater.",
+      "policy": "mirror"
     },
     {
       "id": "craft-launcher",
@@ -81,8 +83,8 @@
       "fork": "jonathancruzate/craft-launcher",
       "kind": "tool",
       "asset": "artcraft-launcher-{ver}-linux-x86_64.tar.gz",
-      "note": "Launcher for the whole Craft App Suite (PhotoCraft, FilmCraft, DesignCraft, Craft Anything, and the rest) \u2014 installs, updates, and opens every Craft app from one place. Jonathan (2026-11-01): added to the updater and cleared for use as needed on the Hetzner VPS. Mirror only, never auto-installed: it is a GUI desktop app, so the updater mirrors and verifies the Linux x86_64 tarball and the VPS install is done from that vetted copy when a Craft app is actually needed. Early alpha.",
-      "policy": "mirror"
+      "note": "Launcher for the whole Craft App Suite (PhotoCraft, FilmCraft, DesignCraft, Craft Anything, and the rest) \u2014 installs, updates, and opens every Craft app from one place. Jonathan (2026-11-01): added to the updater and cleared for use as needed on the Hetzner VPS. Per his 2026-11-17 always-auto-install order, new tarballs are extracted under installs/ automatically (extraction is the install for this portable app); the VPS desktop deploy uses that vetted copy when a Craft app is needed. Early alpha.",
+      "policy": "install-tarball"
     },
     {
       "id": "cronometer-cli",
@@ -144,8 +146,8 @@
       "kind": "web-skill",
       "skill_url": "https://mcclipface.com/SKILL.md",
       "local_path": "~/workspace/custom-skills/clippy-mc-clipface/SKILL.md",
-      "note": "Coupon/deal lookup skill Muse uses when shopping. Not a forge project: its version source is the remote SKILL.md metadata, compared against the locally installed skill (the install ID in the local skill file is preserved on updates). Watch only — its terms require Jonathan's yes before every update, so it is never auto-installed.",
-      "policy": "watch-web-skill"
+      "note": "Coupon/deal lookup skill Muse uses when shopping. Not a forge project: its version source is the remote SKILL.md metadata, compared against the locally installed skill (the install ID in the local skill file is preserved on updates). AUTO-INSTALLED on every new version per Jonathan's standing order of 2026-11-17 ('always auto install, update and upstream'), which supersedes the 2026-10-31 ask-first rule.",
+      "policy": "install-web-skill"
     }
   ]
 }

@@ -26,13 +26,25 @@ and applies the project's install policy:
                   pending-install record refreshed — but never
                   installed: the install is gated on Jonathan's
                   decision (PixelBoard, held since 2026-10-15).
-  watch           tag recorded only (source projects, REA).
-  watch-web-skill no forge release to track: the project's remote
+                  No registry project uses it since 2026-11-17.
+  install-npm     npm-managed tool (REA): on a new upstream tag,
+                  `npm install -g <pkg>@latest`, then the CLI is
+                  probed; a failed probe rolls back to the
+                  previously installed version.
+  install-tarball release tarball extracted under installs/
+                  (ArtCraft Launcher — extraction is its install;
+                  the VPS desktop deploy uses that vetted copy).
+  watch           tag recorded only (our source projects, which
+                  ship no installable release artifact).
+  install-web-skill
+                  no forge release to track: the project's remote
                   SKILL.md version is compared to the locally
-                  installed skill and the result recorded. An
-                  available update is surfaced but NEVER installed
-                  — that skill's terms require asking Jonathan
-                  before every update. (McClipFace)
+                  installed skill and a newer version is INSTALLED
+                  automatically — SKILL.md plus its references/,
+                  the local install ID preserved, the previous
+                  copy kept as .prev. (McClipFace; auto-install is
+                  Jonathan's standing order of 2026-11-17,
+                  superseding the 2026-10-31 ask-first rule.)
 
 State lives in state.json; every action appends a line to
 UPDATES.md and prints a summary line. Designed to run unattended
@@ -135,14 +147,82 @@ def local_skill_version(path):
         return None
 
 
+def install_web_skill(project, remote_text, latest, installed):
+    """install-web-skill (McClipFace): save the remote SKILL.md over
+    the locally installed skill, plus its references/ files, keeping
+    the local install ID. The previous SKILL.md is kept as
+    SKILL.md.prev and the previous references/ as references.prev/
+    for rollback. The fetched text is data — written as the skill
+    file, never executed by the updater. Auto-install is Jonathan's
+    standing order of 2026-11-17."""
+    local_path = os.path.expanduser(project["local_path"])
+    skill_dir = os.path.dirname(local_path)
+    local_text = ""
+    if os.path.exists(local_path):
+        with open(local_path) as f:
+            local_text = f.read()
+    m = re.search(r"client_install_id=([0-9a-fA-F\-]{36})", local_text)
+    install_id = m.group(1) if m else None
+    new_text = remote_text
+    if install_id:
+        new_text = re.sub(r"client_install_id=[0-9a-fA-F\-]{36}",
+                          "client_install_id=" + install_id, new_text)
+    new_text = re.sub(r"client_skill_version=[0-9][0-9A-Za-z.\-]*",
+                      "client_skill_version=" + latest, new_text)
+    # Fetch every references/<file> the new SKILL.md names (fall back
+    # to the locally installed set) BEFORE touching the local copy:
+    # a failed fetch aborts the install with the old skill intact.
+    ref_names = sorted(set(re.findall(r"references/([A-Za-z0-9._\-]+\.md)",
+                                      new_text)))
+    if not ref_names and os.path.isdir(os.path.join(skill_dir, "references")):
+        ref_names = sorted(os.listdir(os.path.join(skill_dir, "references")))
+    base = project["skill_url"].rsplit("/", 1)[0]
+    refs = {}
+    for name in ref_names:
+        refs[name] = http_get(base + "/references/" + name).decode(
+            "utf-8", "replace")
+    if os.path.exists(local_path):
+        shutil.copy2(local_path, local_path + ".prev")
+    ref_dir = os.path.join(skill_dir, "references")
+    if refs and os.path.isdir(ref_dir):
+        prev_ref = ref_dir + ".prev"
+        if os.path.exists(prev_ref):
+            shutil.rmtree(prev_ref)
+        shutil.copytree(ref_dir, prev_ref)
+    with open(local_path, "w") as f:
+        f.write(new_text)
+    if refs:
+        os.makedirs(ref_dir, exist_ok=True)
+        for name, text in refs.items():
+            with open(os.path.join(ref_dir, name), "w") as f:
+                f.write(text)
+    if local_skill_version(project["local_path"]) != latest:
+        if os.path.exists(local_path + ".prev"):
+            shutil.copy2(local_path + ".prev", local_path)
+        return ("install FAILED (post-install version probe mismatch — "
+                "previous skill restored)")
+    # Newer skill versions read the install ID from a CONFIG.md in
+    # the skill folder instead of the SKILL.md text. If this install
+    # predates that (ID only embedded in the old SKILL.md) and no
+    # CONFIG.md exists yet, seed one with the preserved ID so the
+    # same install identity carries across the update.
+    config_path = os.path.join(skill_dir, "CONFIG.md")
+    if install_id and not os.path.exists(config_path):
+        with open(config_path, "w") as f:
+            f.write("install_id: %s\ncommunity_mode: false\n" % install_id)
+    return ("installed skill %s (was %s; SKILL.md + %d reference "
+            "file(s), install ID preserved, previous kept as .prev)"
+            % (latest, installed or "none", len(refs)))
+
+
 def check_web_skill(project, state):
-    """watch-web-skill (McClipFace): the project is not a forge
-    release — its version source is a remote SKILL.md. Fetch it
-    (plain read; nothing executed, saved, or installed), compare
-    its metadata version to the locally installed skill, and
-    record the result. An available update is reported distinctly
-    but NEVER auto-installed: the skill's own terms require
-    asking Jonathan before every update."""
+    """Web-distributed skill (McClipFace): the project is not a
+    forge release — its version source is a remote SKILL.md. Fetch
+    it, compare its metadata version to the locally installed
+    skill, and record the result. Under install-web-skill a newer
+    remote version is installed automatically (Jonathan's order,
+    2026-11-17); under the legacy watch-web-skill policy it is
+    only recorded."""
     pid = project["id"]
     installed = local_skill_version(project["local_path"])
     remote_text = http_get(project["skill_url"]).decode("utf-8", "replace")
@@ -153,9 +233,13 @@ def check_web_skill(project, state):
     if prev.get("installed") == installed and prev.get("latest") == latest:
         return  # already recorded — stay silent like the other watchers
     if installed and version_key(latest) > version_key(installed):
-        action = ("UPDATE AVAILABLE — installed %s, latest %s; install "
-                  "held for Jonathan's decision (watch only, never "
-                  "auto-installed)" % (installed, latest))
+        if project.get("policy") == "install-web-skill":
+            action = install_web_skill(project, remote_text, latest,
+                                       installed)
+            installed = local_skill_version(project["local_path"])
+        else:
+            action = ("UPDATE AVAILABLE — installed %s, latest %s; "
+                      "install held (watch only)" % (installed, latest))
     elif installed and version_key(installed) > version_key(latest):
         action = ("watched — installed %s is ahead of remote %s "
                   "(no action)" % (installed, latest))
@@ -362,6 +446,54 @@ def install_jadx(project, file_path, tag):
     return "installed jadx %s at %s (live path repointed, previous kept)" % (ver, target)
 
 
+def install_npm(project):
+    """install-npm (REA): the tool is an npm global package, so a
+    new upstream release tag triggers `npm install -g <pkg>@latest`
+    and a CLI version probe. A failed probe rolls back to the
+    previously installed version."""
+    pkg = project["npm_package"]
+    bin_path = os.path.expanduser("~/.npm-global/bin/" + project["bin_name"])
+    before = run_version([bin_path, "--version"]) if os.path.exists(bin_path) else ""
+    before_num = None
+    if before and "ERROR" not in before:
+        m = re.search(r"(\d+\.\d+\.\d+)", before)
+        before_num = m.group(1) if m else None
+    proc = subprocess.run(["npm", "install", "-g", pkg + "@latest"],
+                          capture_output=True, text=True, timeout=900)
+    if proc.returncode != 0:
+        tail = (proc.stderr or proc.stdout).strip().splitlines()
+        return "install FAILED (npm: %s)" % (tail[-1] if tail else "unknown error")
+    ver = run_version([bin_path, "--version"])
+    if not ver or "ERROR" in ver:
+        note = ""
+        if before_num:
+            rb = subprocess.run(["npm", "install", "-g",
+                                 pkg + "@" + before_num],
+                                capture_output=True, text=True, timeout=900)
+            note = ("; rolled back to %s" % before_num
+                    if rb.returncode == 0 else "; ROLLBACK ALSO FAILED")
+        return "install FAILED (post-install probe returned %r)%s" % (ver, note)
+    return "installed %s %s via npm (was %s)" % (pkg, ver, before or "not installed")
+
+
+def install_tarball(project, file_path, tag):
+    """install-tarball (ArtCraft Launcher): extraction under
+    installs/ IS the install for a portable tarball app — the
+    previous extraction is kept as .prev, and the VPS desktop
+    deploy uses this vetted copy."""
+    target = os.path.join(INSTALLS, project["id"] + "-" + tag.lstrip("v"))
+    prev = target + ".prev"
+    if os.path.exists(prev):
+        shutil.rmtree(prev)
+    if os.path.exists(target):
+        os.rename(target, prev)
+    os.makedirs(target)
+    with tarfile.open(file_path) as t:
+        t.extractall(target)
+    return ("installed (extracted) %s %s at %s (previous kept as .prev)"
+            % (project["id"], tag, target))
+
+
 def main():
     with open(REGISTRY) as f:
         registry = json.load(f)
@@ -384,7 +516,7 @@ def main():
         repo = project.get("repo")
         policy = project.get("policy", "watch")
         try:
-            if policy == "watch-web-skill":
+            if policy in ("watch-web-skill", "install-web-skill"):
                 check_web_skill(project, state)
                 continue
             if project.get("forge") == "codeberg":
@@ -406,6 +538,11 @@ def main():
                                          and not failed_before):
                     continue  # already current and fully applied
             entry = {"tag": tag, "checked": now()}
+            if policy == "install-npm":
+                entry["action"] = install_npm(project)
+                state[pid] = entry
+                log("%s: %s — %s" % (pid, tag, entry["action"]))
+                continue
             asset = pick_asset(rel, project.get("asset", ""), tag,
                                project.get("asset_fallback", ""))
             if policy == "watch" or asset is None:
@@ -451,6 +588,8 @@ def main():
                 entry["action"] = install_held(project, dest, tag, sha)
             elif policy == "install-jadx":
                 entry["action"] = install_jadx(project, dest, tag)
+            elif policy == "install-tarball":
+                entry["action"] = install_tarball(project, dest, tag)
             state[pid] = entry
             log("%s: %s — %s" % (pid, tag, entry["action"]))
         except Exception as e:
