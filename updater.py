@@ -71,7 +71,7 @@ INSTALLS = os.path.join(HERE, "installs")
 LOG = os.path.join(HERE, "UPDATES.md")
 UA = {"User-Agent": "Muse-GitHub-Updater", "Accept": "application/vnd.github+json"}
 JAVA_HOME = os.path.expanduser("~/workspace/custom-skills/local-rea/tools/jdk")
-JADX_LIVE = os.path.expanduser("~/workspace/metamuse-widget/tools/jadx")
+JADX_LIVE = os.path.expanduser("~/workspace/meta-muse-widget/tools/jadx")
 LOCAL_BIN = os.path.expanduser("~/.local/bin")
 
 
